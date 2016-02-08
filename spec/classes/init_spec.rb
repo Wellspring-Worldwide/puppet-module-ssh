@@ -2087,6 +2087,18 @@ describe 'ssh' do
     end
   end
 
+  context 'with sshd_authorized_keys_command_user and sshd_authorized_keys_command_user_directive' do
+    let(:params) { {
+      :sshd_authorized_keys_command_user_directive => 'AuthorizedKeysCommandRunAs',
+      :sshd_authorized_keys_command_user => 'nobody'
+    } }
+
+    it 'should use that directive with the appropriate user' do
+      should contain_file('sshd_config') \
+        .with_content(/AuthorizedKeysCommanduRunAs nobody/)
+    end
+  end
+
   context 'with sshd_banner_content set and with default value on sshd_config_banner on valid osfamily' do
     let(:params) { { :sshd_banner_content => 'textinbanner' } }
     let :facts do
